@@ -1,18 +1,20 @@
+const startButton = document.getElementById('startButton');
 const switchButton = document.getElementById('switchButton');
-const captureButton = document.getElementById('captureButton');
-const downloadLink = document.getElementById('downloadLink');
 const videoElement = document.getElementById('video');
 let currentStream;
 let currentDeviceId = 'environment'; // Başlangıçta arka kamera
-let currentPhoto;
+
+startButton.addEventListener('click', function () {
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        startCamera(currentDeviceId);
+    } else {
+        alert("Tarayıcınız kamera desteği sağlamıyor.");
+    }
+});
 
 switchButton.addEventListener('click', function () {
     currentDeviceId = currentDeviceId === 'environment' ? 'user' : 'environment'; // Kamerayı değiştir
     startCamera(currentDeviceId);
-});
-
-captureButton.addEventListener('click', function () {
-    capturePhoto();
 });
 
 function startCamera(deviceId) {
@@ -30,6 +32,8 @@ function startCamera(deviceId) {
                         }
                         currentStream = stream;
                         videoElement.srcObject = stream;
+                        startButton.style.display = 'none'; // Kamerayı açtıktan sonra butonu gizle
+                        switchButton.style.display = 'block'; // Switch butonunu göster
                     })
                     .catch(function (error) {
                         alert("Kamera erişimi reddedildi veya bir hata oluştu.");
@@ -37,30 +41,3 @@ function startCamera(deviceId) {
             }
         });
 }
-
-function capturePhoto() {
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    
-    // Video boyutlarına göre canvas boyutunu ayarlıyoruz
-    canvas.width = videoElement.videoWidth;
-    canvas.height = videoElement.videoHeight;
-    
-    // Videodan resmi alıyoruz
-    context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-    
-    // Fotoğrafı base64 formatında elde ediyoruz
-    const photoData = canvas.toDataURL('image/png');
-    
-    // Fotoğrafı kaydetmek için indirme linkini oluşturuyoruz
-    currentPhoto = photoData;
-    const imageUrl = photoData;
-    
-    downloadLink.href = imageUrl;
-    downloadLink.style.display = 'block'; // İndirme linkini göster
-    
-    // Fotoğraf çekildiğinde UI'de değişiklik yapılabilir
-    alert('Fotoğraf Çekildi!');
-}
-
-startCamera(currentDeviceId); // İlk kamera açılışında başlatma
