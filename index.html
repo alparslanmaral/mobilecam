@@ -3,15 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kamera İzni ve Görüntü</title>
+    <title>Kamera Uygulaması</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Kamera Görüntüsü</h1>
+    <div class="camera-container">
         <video id="video" autoplay></video>
-        <button id="startButton">Kamerayı Aç</button>
-        <button id="switchButton" style="display: none;">Kamerayı Değiştir</button>
+        <div class="controls">
+            <button id="switchButton" class="switch-btn">&#x21C5;</button>
+            <button id="captureButton" class="capture-btn">&#x1F4F7;</button>
+        </div>
+        <a id="downloadLink" href="#" download="photo.png" style="display: none;">
+            <button class="download-btn">Fotoğrafı İndir</button>
+        </a>
     </div>
     <script src="script.js"></script>
 </body>
